@@ -1,0 +1,114 @@
+<h2>Task Details</h2>
+
+<p><strong>Title:</strong> <%= @task.title %></p>
+<p><strong>Description:</strong> <%= @task.description %></p>
+<p><strong>Status:</strong> <%= @task.status %></p>
+<p><strong>Due Date:</strong> <%= @task.due_date %></p>
+<p><strong>Created At:</strong> <%= @task.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+<p><strong>Updated At:</strong> <%= @task.updated_at.strftime("%Y-%m-%d %H:%M") %></p>
+
+<h3>Task Creator</h3>
+<p><strong>Name:</strong> <%= @task.user.name %></p>
+<p><strong>Email:</strong> <%= @task.user.email %></p>
+
+<% if @task.user == current_user %>
+  <%= link_to "Edit Task", edit_task_path(@task) %> |
+  <%= link_to "Delete Task", task_path(@task), method: :delete, data: { confirm: "Are you sure?" } %>
+<% end %>
+
+<h3>Labels</h3>
+<ul>
+  <% @task.labels.each do |label| %>
+    <li><%= label.name %></li>
+  <% end %>
+</ul>
+
+
+<h2>Comments</h2>
+
+<div class="comments-section">
+  <ul class="comments-list">
+    <% @task.comments.each do |comment| %>
+      <li class="comment-item">
+        <p>
+          <strong><%= comment.user.name %>:</strong> <%= comment.content %>
+          <span class="comment-timestamp"><%= comment.created_at.strftime("%Y-%m-%d %H:%M") %></span>
+        </p>
+        <% if comment.user == current_user %>
+          <%= link_to "Delete", task_comment_path(@task, comment), method: :delete, data: { confirm: "Are you sure?" }, class: "delete-comment-link" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="new-comment-form">
+    <%= form_with model: [@task, Comment.new], url: task_comments_path(@task), method: :post do |f| %>
+      <div class="form-group">
+        <%= f.label :content, "New Comment", class: "form-label" %>
+        <%= f.text_area :content, required: true, class: "form-textarea" %>
+      </div>
+      <%= f.submit "Add Comment", class: "form-submit-button" %>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  .comments-section {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  .comments-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  .comment-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .comment-timestamp {
+    font-size: 0.9em;
+    color: #888;
+    margin-left: 10px;
+  }
+  .delete-comment-link {
+    color: red;
+    font-size: 0.9em;
+    margin-left: 10px;
+  }
+  .new-comment-form {
+    margin-top: 20px;
+  }
+  .form-group {
+    margin-bottom: 10px;
+  }
+  .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .form-textarea {
+    width: 100%;
+    height: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  .form-submit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .form-submit-button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<%= link_to "Back to Task List", tasks_path %>
+
