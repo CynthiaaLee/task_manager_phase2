@@ -47,4 +47,4 @@
 ---
 
 ## **📊 Database Schema (ER Diagram)**
-![alt text](image-1.png)
+![alt text](ER_diagram.png)
