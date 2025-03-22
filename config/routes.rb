@@ -1,15 +1,17 @@
 Rails.application.routes.draw do
-  resources :tasks do
-    resources :comments, only: [:create, :destroy]
+  devise_for :users, path: 'api/users', controllers: {
+    sessions: 'api/users/sessions',
+    registrations: 'api/users/registrations'
+  }, skip: [:passwords]
+  
+  devise_scope :user do
+    post 'api/users/sign_in', to: 'api/users/sessions#create'
+    delete 'api/users/sign_out', to: 'api/users/sessions#destroy'
+    post 'api/users', to: 'api/users/registrations#create'
+    post 'api/users/update_name', to: 'api/users#update_name'
   end
 
-  resources :users, only: [:new, :create]
-  resources :sessions, only: [:new, :create, :destroy]
-
-  get "/login", to: "sessions#new"
-  post "/login", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy"
-  get "/signup", to: "users#new", as: "signup"
-  post "/signup", to: "users#create"
-  root "tasks#index"
+  namespace :api do
+    resources :tasks
+  end
 end

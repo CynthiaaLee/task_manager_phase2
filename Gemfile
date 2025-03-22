@@ -17,7 +17,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
-
+gem "devise"
 # Ensure Rails logs and assets work properly on Heroku
 group :production do
   gem "rails_12factor"

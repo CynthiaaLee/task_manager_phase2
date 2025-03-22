@@ -87,4 +87,13 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  config.action_mailer.delivery_method = :postmark
+  config.action_mailer.postmark_settings = {
+    api_token: ENV["POSTMARK_API_KEY"] # ✅ Use environment variable for security
+  }
+  config.action_mailer.default_url_options = { host: "task-manager-yz92.onrender.com"} # Change this for production
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  
 end
